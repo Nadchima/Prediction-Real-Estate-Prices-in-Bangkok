@@ -2,55 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bangkok Property Price Predictor</title>
+  <title>Bangkok Condo Price Predictor</title>
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; padding: 2rem; background: #f5f7fb; max-width: 680px; margin: auto; color: #172033; }
-    main { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 12px 35px rgba(24, 39, 75, 0.10); }
-    h1 { text-align: center; margin-bottom: 0.5rem; }
-    .subtitle { color: #667085; text-align: center; margin-bottom: 2rem; }
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; max-width: 600px; margin: auto; }
+    h1 { color: #333; text-align: center; }
     label { display: block; margin-top: 1rem; font-weight: bold; }
-    input, select { width: 100%; padding: 0.75rem; margin-top: 0.5rem; border-radius: 8px; border: 1px solid #cbd5e1; font: inherit; }
-    button { width: 100%; margin-top: 1.5rem; padding: 0.85rem 1.5rem; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font: inherit; font-weight: 700; }
-    button:disabled { opacity: 0.65; cursor: wait; }
-    #result { min-height: 1.5rem; margin-top: 1.5rem; font-size: 1.15rem; font-weight: 700; text-align: center; }
+    input, select { width: 100%; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; border: 1px solid #ccc; }
+    button { margin-top: 1.5rem; padding: 0.7rem 1.5rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #result { margin-top: 2rem; font-size: 1.2rem; color: green; text-align: center; }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Bangkok Property Price Predictor</h1>
-    <p class="subtitle">Enter the property details to receive an estimated price in Thai baht.</p>
+  <h1>Bangkok Condo Price Predictor</h1>
 
-    <label for="area">Area (sq. ft.)</label>
-    <input type="number" id="area" min="1" max="20000" step="0.1" value="850" required>
+  <label>Area (sq.ft.):</label>
+  <input type="number" id="area" min="1" step="0.1">
 
-    <label for="bedroom">Bedrooms</label>
-    <input type="number" id="bedroom" min="1" max="50" value="2" required>
+  <label>Bedrooms:</label>
+  <input type="number" id="bedroom" min="1">
 
-    <label for="bathroom">Bathrooms</label>
-    <input type="number" id="bathroom" min="1" max="50" value="1" required>
+  <label>Bathrooms:</label>
+  <input type="number" id="bathroom" min="1">
 
-    <label for="type">Property type</label>
-    <select id="type">
-      <option value="Apartment">Apartment</option>
-      <option value="Condo">Condo</option>
-      <option value="House">House</option>
-    </select>
+  <label>Property Type:</label>
+  <select id="type">
+    <option value="Apartment">Apartment</option>
+    <option value="Condo">Condo</option>
+    <option value="House">House</option>
+  </select>
 
-    <button id="predict-button" onclick="predict()">Predict price</button>
+  <button onclick="predict()">Predict Price</button>
 
-    <div id="result" role="status" aria-live="polite"></div>
-  </main>
+  <div id="result"></div>
 
   <script>
-    const API_BASE_URL = window.location.hostname.endsWith('github.io')
-      ? 'https://condo-api-predicted.onrender.com'
-      : '';
-
     async function predict() {
-      const resultElement = document.getElementById('result');
-      const button = document.getElementById('predict-button');
       const payload = {
         area_sqft: parseFloat(document.getElementById('area').value),
         no_bedroom: parseInt(document.getElementById('bedroom').value),
@@ -58,34 +44,17 @@
         property_type: document.getElementById('type').value
       };
 
-      if (!Number.isFinite(payload.area_sqft) || !Number.isInteger(payload.no_bedroom) || !Number.isInteger(payload.no_bathroom)) {
-        resultElement.textContent = 'Please complete all fields with valid numbers.';
-        resultElement.style.color = '#b42318';
-        return;
-      }
-
       try {
-        button.disabled = true;
-        resultElement.textContent = 'Calculating…';
-        resultElement.style.color = '#475467';
-        const response = await fetch(`${API_BASE_URL}/predict`, {
+        const response = await fetch('https://condo-api-predicted.onrender.com/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
         const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.detail || 'Prediction request failed');
-        }
-        const formattedPrice = new Intl.NumberFormat('en-US').format(result.predicted_price_thb);
-        resultElement.textContent = `Estimated price: ${formattedPrice} THB`;
-        resultElement.style.color = '#067647';
+        document.getElementById('result').innerText = `Predicted Price: ${result.predicted_price_thb} THB`;
       } catch (error) {
-        resultElement.textContent = `Error: ${error.message}`;
-        resultElement.style.color = '#b42318';
-      } finally {
-        button.disabled = false;
+        document.getElementById('result').innerText = 'Error: Unable to fetch prediction';
       }
     }
   </script>
