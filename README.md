@@ -17,6 +17,10 @@ The deployed model accepts:
 
 It returns an estimated property price in Thai baht.
 
+## Final output
+
+The final user-facing result is the web interface in [`frontend/index.html`](./frontend/index.html). Users enter the property details on this page, and the frontend sends the request to the FastAPI `/predict` endpoint before displaying the estimated price in Thai baht.
+
 ## Dataset
 
 | Item | Value |
