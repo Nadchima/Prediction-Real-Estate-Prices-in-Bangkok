@@ -21,7 +21,7 @@ It returns an estimated property price in Thai baht.
 
 **[Open the live Bangkok Property Price Predictor](https://nadchima.github.io/Prediction-Real-Estate-Prices-in-Bangkok/)**
 
-The final user-facing result is a live website, not the GitHub source-code view. Its source is maintained in [`frontend/index.html`](./frontend/index.html). Users enter the property details on the live page, and the frontend sends the request to the FastAPI `/predict` endpoint before displaying the estimated price in Thai baht.
+The final result is available as an interactive web application. Enter the property's area, number of bedrooms and bathrooms, and property type to receive an estimated Bangkok property price in Thai baht. The interface connects directly to the deployed FastAPI prediction service.
 
 ## Dataset
 
