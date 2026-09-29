@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: bangkok-property-price-predictor
+    runtime: docker
+    plan: free
+    region: singapore
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: MODEL_PATH
+        value: models/bkk_condo_prices-v1.pkl
