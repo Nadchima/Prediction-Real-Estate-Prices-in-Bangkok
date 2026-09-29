@@ -23,6 +23,10 @@ It returns an estimated property price in Thai baht.
 
 The final result is available as an interactive web application. Enter the property's area, number of bedrooms and bathrooms, and property type to receive an estimated Bangkok property price in Thai baht. The interface connects directly to the deployed FastAPI prediction service.
 
+### System architecture
+
+![System architecture diagram](./assets/system-architecture-diagram.png)
+
 ## Dataset
 
 | Item | Value |
